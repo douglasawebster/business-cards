@@ -1,8 +1,8 @@
 //
 //  SceneDelegate.swift
-//  business-cards
+//  BusinessCards
 //
-//  Created by Douglas Webster on 12/10/20.
+//  Created by Douglas Webster on 12/11/20.
 //
 
 import UIKit
@@ -57,4 +57,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-

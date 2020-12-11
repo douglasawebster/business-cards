@@ -1,6 +1,6 @@
 //
 //  Theme.swift
-//  business-cards
+//  BusinessCards
 //
 //  Created by Douglas Webster on 12/11/20.
 //
@@ -9,6 +9,14 @@ import Foundation
 import UIKit
 
 public class Theme {
+    
+    public static let backgroundColor: UIColor = {
+        if #available(iOS 13, *) {
+            return UIColor.systemBackground
+        } else {
+            return UIColor.white
+        }
+    }()
     
     public static var keyColor: UIColor = {
         let standardKeyColor = UIColor(red: 241/256, green: 81/256, blue: 86/256, alpha: 1)
