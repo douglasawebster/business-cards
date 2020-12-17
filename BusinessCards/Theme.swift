@@ -19,15 +19,12 @@ public class Theme {
     }()
     
     public static var keyColor: UIColor = {
-        let standardKeyColor = UIColor(red: 241/256, green: 81/256, blue: 86/256, alpha: 1)
+        let standardKeyColor = UIColor(red: 0/255, green: 99/255, blue: 93/255, alpha: 1)
         if #available(iOS 13, *) {
             return UIColor { (traitCollection) -> UIColor in
                 switch traitCollection.userInterfaceStyle {
                 case .dark:
-                    return UIColor(red: 241/256,
-                                   green: 81/256,
-                                   blue: 86/256,
-                                   alpha: 1.0)
+                    return UIColor(red: 0/255, green: 99/255, blue: 93/255, alpha: 1)
                 case .light: fallthrough
                 case .unspecified: fallthrough
                 @unknown default:

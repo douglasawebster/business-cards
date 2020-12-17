@@ -17,122 +17,171 @@ class AuthenticationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Theme.backgroundColor
-        myView.loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
     }
     
-    // MARK: - TODO
-    @objc private func loginButtonPressed() {
-        return
+    enum AuthViewControllerState {
+        case buttons
+        case signIn
+        case signUp
+        case forgotPassword
     }
     
-    private lazy var loginLabel: UILabel = {
-        let label = Theme.getBoldLabel(text: "Login")
-        return label
-    }()
-    
-    private lazy var usernameField: UITextField = {
-        let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "Username")
-        return textField
-    }()
-    
-    private lazy var passwordField: UITextField = {
-        let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(string: "Password")
-        return textField
-    }()
-    
-    private lazy var loginButton: UIButton = {
-        let button = Theme.getButton(title: "Login")
-        button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
-        let textColor: UIColor
-        if #available(iOS 13, *) {
-            textColor = UIColor.label
-        } else {
-            textColor = UIColor.darkText
+    private var currentState: AuthViewControllerState = .buttons
+
+    private var currentStackView: UIStackView?
+    private func setState(_ updatedState: AuthViewControllerState) {
+        guard currentState != updatedState else { return }
+        
+        let incomingStackView: UIStackView
+        switch updatedState {
+        case .buttons:
+            incomingStackView = buttonStackView
+        case .signIn:
+            return //incomingStackView = signInStackView
+        case .signUp:
+            return //incomingStackView = signUpStackView
+        case .forgotPassword:
+            return //incomingStackView = forgotPasswordStackView
         }
-        button.setTitleColor(textColor, for: .normal)
-        button.setTitle("Login", for: .normal)
-        button.layer.backgroundColor = Theme.keyColor.cgColor
-        return button
+        
+        let existingStackView = self.currentStackView
+        
+        incomingStackView.frame = scrollView.frame
+        incomingStackView.layoutIfNeeded()
+        scrollView.addSubview(incomingStackView)
+        
+        self.currentState = updatedState
+        self.currentStackView = incomingStackView
+        self.myView.currentStackView = incomingStackView
+        
+        existingStackView?.removeFromSuperview()
+        
+        self.myView.setNeedsLayout()
+    }
+    
+    @objc private func signInButtonPressed() {
+        self.setState(.signIn)
+    }
+    
+    @objc private func signUpButtonPressed() {
+        self.setState(.signUp)
+    }
+    
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.contentInsetAdjustmentBehavior = .never
+        return scrollView
+    }()
+    
+    private let buttonWidthScale: CGFloat = 0.6
+    private let textFieldWidthScale: CGFloat = 0.9
+    private let stackPadding: CGFloat = 12
+    
+    private lazy var signInButton: UIButton = {
+        let signInButton = Theme.getButton(title: "Sign In")
+        signInButton.setTitleColor(UIColor.clear, for: .disabled)
+        signInButton.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
+        signInButton.layer.backgroundColor = Theme.keyColor.cgColor
+        return signInButton
+    }()
+    
+    private lazy var signUpButton: UIButton = {
+        let signUpButton = Theme.getButton(title: "Sign Up")
+        signUpButton.setTitleColor(UIColor.clear, for: .disabled)
+        signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
+        signUpButton.layer.backgroundColor = Theme.keyColor.cgColor
+        return signUpButton
+    }()
+    
+    private lazy var buttonStackView: UIStackView = {
+        let stackView = UIStackView()
+        
+        let signInButton = self.signInButton
+        stackView.addArrangedSubview(signInButton)
+        let signUpButton = self.signUpButton
+        stackView.addArrangedSubview(signUpButton)
+        
+        var constraints: [NSLayoutConstraint] = []
+        for view in stackView.arrangedSubviews {
+            if view is UIButton {
+                let buttonWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.buttonWidthScale, constant: 0)
+                constraints.append(buttonWidthConstraint)
+            } else if view is UITextView {
+                let textFieldWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.textFieldWidthScale, constant: 0)
+                constraints.append(textFieldWidthConstraint)
+            }
+            stackView.addConstraints(constraints)
+            
+            stackView.axis = .vertical
+            stackView.alignment = .center
+            stackView.spacing = self.stackPadding
+        }
+        
+        return stackView
     }()
     
     private lazy var myView: View = {
-       let view = View(loginLabel: loginLabel, usernameField: usernameField, passwordField: passwordField, loginButton: loginButton)
+        let view = View(scrollView: scrollView, stackView: buttonStackView)
         return view
     }()
     
     private class View: UIView {
-        init(loginLabel: UILabel, usernameField: UITextField, passwordField: UITextField, loginButton: UIButton) {
-            self.loginLabel = loginLabel
-            self.usernameField = usernameField
-            self.passwordField = passwordField
-            self.loginButton = loginButton
+        init(scrollView: UIScrollView, stackView: UIStackView) {
+            self.scrollView = scrollView
+            self.currentStackView = stackView
             
             super.init(frame: .zero)
             
-            self.addSubview(loginLabel)
-            self.addSubview(usernameField)
-            self.addSubview(passwordField)
-            self.addSubview(loginButton)
+            self.addSubview(scrollView)
+            self.addSubview(currentStackView)
         }
         
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
         
-        let loginLabel: UILabel
+        let scrollView: UIScrollView
         
-        let usernameField: UITextField
-        
-        let passwordField: UITextField
-        
-        let loginButton: UIButton
+        var currentStackView: UIStackView
         
         override func sizeThatFits(_ size: CGSize) -> CGSize {
-            return self.layout(in: CGRect(origin: bounds.origin, size: CGSize(width: 200, height: 200))).contentSize
+            return self.layout(in: CGRect(origin: bounds.origin, size: CGSize(width: size.width, height: size.height))).contentSize
         }
         
         override func layoutSubviews() {
             super.layoutSubviews()
             let layout = self.layout(in: bounds.inset(by: safeAreaInsets))
-            loginLabel.frame = layout.loginLabelFrame
-            usernameField.frame = layout.usernameLabelFrame
-            passwordField.frame = layout.passwordLabelFrame
-            loginButton.frame = layout.loginButtonFrame
+            currentStackView.frame = layout.stackViewFrame
+            scrollView.contentSize = layout.contentSize
+            scrollView.frame = layout.scrollViewFrame
         }
         
         private func layout(in bounds: CGRect) -> Layout {
-            let loginLabelSize = loginLabel.sizeThatFits(bounds.size)
-            let loginLabelOrigin = CGPoint(x: bounds.midX - (loginLabelSize.width/2.0), y: bounds.origin.y)
-            let loginLabelFrame = CGRect(origin: loginLabelOrigin, size: loginLabelSize)
+            let stackViewWidth: CGFloat = 400.0 //min(bounds.width * 0.8, 400)
             
-            let usernameFieldSize = usernameField.sizeThatFits(bounds.size)
-            let usernameFieldOrigin = CGPoint(x: bounds.midX - (usernameFieldSize.width/2.0), y: loginLabelFrame.maxY + padding)
-            let usernameFieldFrame = CGRect(origin: usernameFieldOrigin, size: usernameFieldSize)
+            for view in currentStackView.arrangedSubviews {
+                if let label = view as? UILabel {
+                    label.preferredMaxLayoutWidth = stackViewWidth
+                }
+            }
+            let stackViewSize = currentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            var stackViewFrame = CGRect.zero
+            stackViewFrame.origin.x = bounds.midX - stackViewSize.width/2.0
+            stackViewFrame.origin.y = bounds.midY - stackViewSize.height/2.0
+            stackViewFrame.size.width = stackViewSize.width
+            stackViewFrame.size.height = stackViewSize.height
             
-            let passwordFieldSize = passwordField.sizeThatFits(bounds.size)
-            let passwordFieldOrigin = CGPoint(x: bounds.midX - (passwordFieldSize.width/2.0), y: usernameFieldFrame.maxY + padding)
-            let passwordFieldFrame = CGRect(origin: passwordFieldOrigin, size: passwordFieldSize)
+            let contentSize = CGSize(width: stackViewFrame.width, height: stackViewFrame.height)
             
-            let loginButtonSize = loginButton.sizeThatFits(bounds.size)
-            let loginButtonOrigin = CGPoint(x: bounds.midX - (loginButtonSize.width/2.0), y: passwordFieldFrame.maxY + padding)
-            let loginButtonFrame = CGRect(origin: loginButtonOrigin, size: loginButtonSize)
             
-            let contentWidth: CGFloat = max(max(max(loginLabelFrame.width, usernameFieldFrame.width), passwordFieldFrame.width), loginButtonFrame.width)
-            let contentHeight: CGFloat = loginLabelFrame.maxY - loginLabelFrame.minY
-            
-            return Layout(loginLabelFrame: loginLabelFrame, usernameLabelFrame: usernameFieldFrame, passwordLabelFrame: passwordFieldFrame, loginButtonFrame: loginButtonFrame, contentSize: CGSize(width: contentWidth, height: contentHeight))
-            
+            return Layout(stackViewFrame: stackViewFrame, scrollViewFrame: stackViewFrame, contentSize: contentSize)
         }
         
-        private let padding: CGFloat = 8
+        private let padding: CGFloat = 12
         
         private struct Layout {
-            let loginLabelFrame: CGRect
-            let usernameLabelFrame: CGRect
-            let passwordLabelFrame: CGRect
-            let loginButtonFrame: CGRect
+            let stackViewFrame: CGRect
+            let scrollViewFrame: CGRect
             let contentSize: CGSize
         }
     }

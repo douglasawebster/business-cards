@@ -21,9 +21,43 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = RootViewController()
-            self.window = window
+            let navigationController = UINavigationController(rootViewController: ViewController())
+            
+            
+            let navigationBarTextAttributes = [
+                NSAttributedString.Key.foregroundColor : UIColor.white
+            ]
+            
+            if #available(iOS 13, *) {
+                let navigationBarAppearance = UINavigationBarAppearance()
+                
+                navigationBarAppearance.configureWithOpaqueBackground()
+                navigationBarAppearance.backgroundColor = Theme.keyColor
+                
+                navigationBarAppearance.titleTextAttributes = navigationBarTextAttributes
+                navigationBarAppearance.largeTitleTextAttributes = navigationBarTextAttributes
+                
+                let buttonAppearance = UIBarButtonItemAppearance(style: .done)
+                buttonAppearance.normal.titleTextAttributes = navigationBarTextAttributes
+                navigationBarAppearance.buttonAppearance = buttonAppearance
+                
+                UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+                UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+            } else {
+                UINavigationBar.appearance().barTintColor = Theme.keyColor
+                
+                UINavigationBar.appearance().titleTextAttributes = navigationBarTextAttributes
+                UINavigationBar.appearance().largeTitleTextAttributes = navigationBarTextAttributes
+                UIBarButtonItem.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setTitleTextAttributes(navigationBarTextAttributes, for: .normal)
+                
+                UINavigationBar.appearance().isTranslucent = false
+            }
+            
+            UINavigationBar.appearance().tintColor = UIColor.white
+            
+            window.rootViewController = navigationController
             window.makeKeyAndVisible()
+            self.window = window
         }
     }
 

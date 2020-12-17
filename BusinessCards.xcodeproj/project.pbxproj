@@ -17,8 +17,8 @@
 		DFAE41EA25840E7E0077D893 /* BusinessCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE41E925840E7E0077D893 /* BusinessCardsTests.swift */; };
 		DFAE41F525840E7F0077D893 /* BusinessCardsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE41F425840E7F0077D893 /* BusinessCardsUITests.swift */; };
 		DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */; };
-		DFAE420E25840ECE0077D893 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE420D25840ECE0077D893 /* RootViewController.swift */; };
 		DFAE421325840EF80077D893 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE421225840EF80077D893 /* Theme.swift */; };
+		DFEC5A41258AAAEB008C420E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEC5A40258AAAEB008C420E /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,8 +57,8 @@
 		DFAE41F425840E7F0077D893 /* BusinessCardsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardsUITests.swift; sourceTree = "<group>"; };
 		DFAE41F625840E7F0077D893 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
-		DFAE420D25840ECE0077D893 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		DFAE421225840EF80077D893 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		DFEC5A40258AAAEB008C420E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,9 +123,9 @@
 			children = (
 				DFAE41D225840E7C0077D893 /* AppDelegate.swift */,
 				DFAE41D425840E7C0077D893 /* SceneDelegate.swift */,
+				DFEC5A40258AAAEB008C420E /* ViewController.swift */,
 				DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */,
 				DFAE421225840EF80077D893 /* Theme.swift */,
-				DFAE420D25840ECE0077D893 /* RootViewController.swift */,
 				DFAE41D825840E7E0077D893 /* Assets.xcassets */,
 				DFAE41DD25840E7E0077D893 /* LaunchScreen.storyboard */,
 				DFAE41E025840E7E0077D893 /* Info.plist */,
@@ -362,10 +362,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFEC5A41258AAAEB008C420E /* ViewController.swift in Sources */,
 				DFAE41D325840E7C0077D893 /* AppDelegate.swift in Sources */,
 				DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */,
 				DFAE421325840EF80077D893 /* Theme.swift in Sources */,
-				DFAE420E25840ECE0077D893 /* RootViewController.swift in Sources */,
 				DFAE41D525840E7C0077D893 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
