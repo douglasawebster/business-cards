@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class AuthenticationViewController: UIViewController {
     
@@ -91,17 +92,93 @@ class AuthenticationViewController: UIViewController {
     }
     
     @objc private func attemptSignInButtonPressed() {
-        print("Email: " + (signInEmailTextField.text ?? "No Email"))
-        print("Password: " + (signInPasswordTextField.text ?? "No Password"))
-        return
+        if let email = signInEmailTextField.text, !email.isEmpty,
+           let password = signInPasswordTextField.text, !password.isEmpty {
+            Auth.auth().signIn(withEmail: email, password: password) { (signInResult, error) in
+                if let error = error {
+                    let errorString = self.errorString(for: error)
+                    self.setSignInError(errorString)
+                } else if let _ = signInResult {
+                    self.setSignInError("")
+                }
+            }
+        } else {
+            let needsEmail = (signInEmailTextField.text ?? "").isEmpty
+            let needsPassword = (signInPasswordTextField.text ?? "").isEmpty
+            
+            let errorString: String
+            if needsEmail && needsPassword {
+                errorString = NSLocalizedString("Needs email and password", comment: "")
+            } else if needsEmail {
+                errorString = NSLocalizedString("Needs email", comment: "")
+            } else if needsPassword {
+                errorString = NSLocalizedString("Needs password", comment: "")
+            } else {
+                errorString = NSLocalizedString("Unknown Error", comment: "")
+            }
+            self.setSignInError(errorString)
+        }
+    }
+    
+    private func setSignInError(_ errorString: String) {
+        signInErrorLabel.text = errorString
+        signInErrorLabel.isHidden = errorString.isEmpty
+        myView.setNeedsLayout()
     }
     
     @objc private func attemptSignUpButtonPressed() {
-        print("First Name: " + (signUpFirstNameTextField.text ?? "No First Name"))
-        print("Last Name: " + (signUpLastNameTextField.text ?? "No Last Name"))
-        print("Email: " + (signUpEmailTextField.text ?? "No Email"))
-        print("Password: " + (signUpPasswordTextField.text ?? "No Password"))
-        return
+        let firstNameText = signUpFirstNameTextField.text ?? ""
+        let firstName = firstNameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let lastNameText = signUpLastNameTextField.text ?? ""
+        let lastName = lastNameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let emailText = signUpEmailTextField.text ?? ""
+        let email = emailText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !firstName.isEmpty,
+           !lastName.isEmpty,
+           !email.isEmpty,
+           let password = signUpPasswordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !password.isEmpty {
+            Auth.auth().createUser(withEmail: email, password: password) { (signUpResult, error) in
+                if let error = error {
+                    let errorString = self.errorString(for: error)
+                    self.setSignUpError(errorString)
+                }
+                else if let _ = signUpResult {
+                    self.setSignUpError("")
+                }
+            }
+        } else {
+            let needsFirstName = (signUpFirstNameTextField.text ?? "").isEmpty
+            let needsLastName = (signUpLastNameTextField.text ?? "").isEmpty
+            let needsEmail = (signUpEmailTextField.text ?? "").isEmpty
+            let needsPassword = (signUpPasswordTextField.text ?? "").isEmpty
+            
+            let errorString: String
+            if needsFirstName && needsLastName && needsEmail && needsPassword {
+                errorString = NSLocalizedString("Needs all", comment: "")
+            } else if needsFirstName {
+                errorString = NSLocalizedString("Needs first name", comment: "")
+            } else if needsLastName {
+                errorString = NSLocalizedString("Needs last name", comment: "")
+            } else if needsEmail && needsPassword {
+                errorString = NSLocalizedString("Needs email and password", comment: "")
+            } else if needsEmail {
+                errorString = NSLocalizedString("Needs email", comment: "")
+            } else if needsPassword {
+                errorString = NSLocalizedString("Needs password", comment: "")
+            } else {
+                errorString = NSLocalizedString("Needs all", comment: "")
+            }
+            self.setSignUpError(errorString)
+        }
+        
+    }
+    
+    private func setSignUpError(_ errorString: String) {
+        signUpErrorLabel.text = errorString
+        signUpErrorLabel.isHidden = errorString.isEmpty
+        myView.setNeedsLayout()
     }
     
     private lazy var scrollView: UIScrollView = {
@@ -157,6 +234,10 @@ class AuthenticationViewController: UIViewController {
     }()
     
     // MARK: - Sign In Stack View
+    private lazy var signInErrorLabel: UILabel = {
+        return Theme.getErrorLabel()
+    }()
+    
     private lazy var signInEmailTextField: UITextField = {
         let placeholder = NSLocalizedString("Email", comment: "")
         let textField = self.getTextField(placeholder: placeholder, forPassword: false)
@@ -187,6 +268,7 @@ class AuthenticationViewController: UIViewController {
     private lazy var signInStackView: UIStackView = {
         let stackView = UIStackView()
         
+        stackView.addArrangedSubview(self.signInErrorLabel)
         stackView.addArrangedSubview(self.signInEmailTextField)
         stackView.addArrangedSubview(self.signInPasswordTextField)
         stackView.addArrangedSubview(self.attemptSignInButton)
@@ -197,6 +279,10 @@ class AuthenticationViewController: UIViewController {
     }()
     
     // MARK: - Sign Up Stack View
+    private lazy var signUpErrorLabel: UILabel = {
+        return Theme.getErrorLabel()
+    }()
+    
     private lazy var signUpFirstNameTextField: UITextField = {
         let placeholder = NSLocalizedString("First Name", comment: "")
         let textField = self.getTextField(placeholder: placeholder, forPassword: false)
@@ -240,6 +326,7 @@ class AuthenticationViewController: UIViewController {
     private lazy var signUpStackView: UIStackView = {
         let stackView = UIStackView()
         
+        stackView.addArrangedSubview(self.signUpErrorLabel)
         stackView.addArrangedSubview(self.signUpFirstNameTextField)
         stackView.addArrangedSubview(self.signUpLastNameTextField)
         stackView.addArrangedSubview(self.signUpEmailTextField)
@@ -350,6 +437,51 @@ extension AuthenticationViewController {
         textField.isSecureTextEntry = forPassword
         textField.setContentHuggingPriority(UILayoutPriority.required, for: .vertical)
         return textField
+    }
+    
+}
+
+extension AuthenticationViewController {
+    
+    public enum UserError: Error {
+        case unknown
+        case missingFirstName
+        case missingLastName
+        case network
+        case invalidEmail
+        case passwordTooShort
+        case emailTaken
+        case noAccount
+        case invalidPassword
+        case accountDisabled
+    }
+    
+    private func errorString(for error: Error) -> String {
+        let userError = error as? UserError ?? .unknown
+        let errorString: String
+        switch userError {
+        case .network:
+            errorString = NSLocalizedString("Network Error", comment: "")
+        case .invalidEmail:
+            errorString = NSLocalizedString("Email format error", comment: "")
+        case .passwordTooShort:
+            errorString = NSLocalizedString("Password too short", comment: "")
+        case .emailTaken:
+            errorString = NSLocalizedString("Email Taken", comment: "")
+        case .noAccount:
+            errorString = NSLocalizedString("No such account", comment: "")
+        case .invalidPassword:
+            errorString = NSLocalizedString("Invalid password", comment: "")
+        case .accountDisabled:
+            errorString = NSLocalizedString("Account disabled", comment: "")
+        case .missingFirstName:
+            errorString = NSLocalizedString("Needs first name", comment: "")
+        case .missingLastName:
+            errorString = NSLocalizedString("Needs last name", comment: "")
+        case .unknown:
+            errorString = NSLocalizedString("Unknown Error", comment: "")
+        }
+        return errorString
     }
     
 }

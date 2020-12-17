@@ -78,4 +78,18 @@ public class Theme {
         return textField
     }
     
+    public static func getErrorLabel() -> UILabel {
+        let label = UILabel()
+        if #available(iOS 13, *) {
+            label.textColor = UIColor.systemRed
+        } else {
+            label.textColor = UIColor(red: 251/256, green: 84/256, blue: 107/256, alpha: 1)
+        }
+        label.isHidden = true
+        label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        return label
+    }
+    
 }
