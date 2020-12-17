@@ -177,12 +177,20 @@ class AuthenticationViewController: UIViewController {
         return signInButton
     }()
     
+    private lazy var needToSignUpButton: UIButton = {
+        let title = NSLocalizedString("Need to sign up?", comment: "")
+        let signUpButton = self.getErrorButton(title: title)
+        signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
+        return signUpButton
+    }()
+    
     private lazy var signInStackView: UIStackView = {
         let stackView = UIStackView()
         
         stackView.addArrangedSubview(self.signInEmailTextField)
         stackView.addArrangedSubview(self.signInPasswordTextField)
         stackView.addArrangedSubview(self.attemptSignInButton)
+        stackView.addArrangedSubview(self.needToSignUpButton)
         
         self.configure(stackView)
         return stackView
@@ -213,6 +221,13 @@ class AuthenticationViewController: UIViewController {
         return textField
     }()
     
+    private lazy var needToSignInButton: UIButton = {
+        let title = NSLocalizedString("Already have an account?", comment: "")
+        let signInButton = self.getErrorButton(title: title)
+        signInButton.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
+        return signInButton
+    }()
+    
     private lazy var attemptSignUpButton: UIButton = {
         let title = NSLocalizedString("Sign Up", comment: "")
         let signUpButton = self.getButton(title: title)
@@ -230,6 +245,7 @@ class AuthenticationViewController: UIViewController {
         stackView.addArrangedSubview(self.signUpEmailTextField)
         stackView.addArrangedSubview(self.signUpPasswordTextField)
         stackView.addArrangedSubview(self.attemptSignUpButton)
+        stackView.addArrangedSubview(self.needToSignInButton)
         
         self.configure(stackView)
         return stackView
@@ -311,6 +327,18 @@ extension AuthenticationViewController {
     private func getButton(title: String) -> UIButton {
         let button = Theme.getButton(title: title)
         button.setTitleColor(UIColor.clear, for: .disabled)
+        return button
+    }
+    
+    private func getErrorButton(title: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        let color = UIColor.blue
+        button.setTitleColor(color, for: .normal)
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
+        button.titleLabel?.numberOfLines = 2
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         return button
     }
     
