@@ -63,4 +63,19 @@ public class Theme {
         return button
     }
     
+    public static func getTextField(placeholder: String) -> UITextField {
+        let textField = PaddingTextField()
+        textField.borderStyle = .roundedRect
+        textField.contentVerticalAlignment = .center
+        textField.font = UIFont.preferredFont(forTextStyle: .body)
+        textField.adjustsFontForContentSizeCategory = true
+        if #available(iOS 13, *) {
+            textField.backgroundColor = UIColor.secondarySystemBackground
+        } else {
+            textField.backgroundColor = UIColor(red: 248/256, green: 248/256, blue: 248/256, alpha: 1)
+        }
+        textField.placeholder = placeholder
+        return textField
+    }
+    
 }

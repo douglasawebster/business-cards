@@ -19,6 +19,7 @@
 		DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */; };
 		DFAE421325840EF80077D893 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE421225840EF80077D893 /* Theme.swift */; };
 		DFEC5A41258AAAEB008C420E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEC5A40258AAAEB008C420E /* ViewController.swift */; };
+		DFEC5A60258AE38B008C420E /* PaddingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		DFAE421225840EF80077D893 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		DFEC5A40258AAAEB008C420E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				DFEC5A40258AAAEB008C420E /* ViewController.swift */,
 				DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */,
 				DFAE421225840EF80077D893 /* Theme.swift */,
+				DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */,
 				DFAE41D825840E7E0077D893 /* Assets.xcassets */,
 				DFAE41DD25840E7E0077D893 /* LaunchScreen.storyboard */,
 				DFAE41E025840E7E0077D893 /* Info.plist */,
@@ -363,6 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFEC5A41258AAAEB008C420E /* ViewController.swift in Sources */,
+				DFEC5A60258AE38B008C420E /* PaddingTextField.swift in Sources */,
 				DFAE41D325840E7C0077D893 /* AppDelegate.swift in Sources */,
 				DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */,
 				DFAE421325840EF80077D893 /* Theme.swift in Sources */,

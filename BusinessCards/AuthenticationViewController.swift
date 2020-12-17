@@ -17,6 +17,7 @@ class AuthenticationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Theme.backgroundColor
+        currentStackView = buttonStackView
     }
     
     enum AuthViewControllerState {
@@ -37,7 +38,7 @@ class AuthenticationViewController: UIViewController {
         case .buttons:
             incomingStackView = buttonStackView
         case .signIn:
-            return //incomingStackView = signInStackView
+            incomingStackView = signInStackView //incomingStackView = signInStackView
         case .signUp:
             return //incomingStackView = signUpStackView
         case .forgotPassword:
@@ -67,39 +68,44 @@ class AuthenticationViewController: UIViewController {
         self.setState(.signUp)
     }
     
+    @objc private func attemptSignInButtonPressed() {
+        print("Email: " + (signInEmailTextField.text ?? "No Email"))
+        print("Password: " + (signInPasswordTextField.text ?? "No Password"))
+        return
+    }
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.contentInsetAdjustmentBehavior = .never
         return scrollView
     }()
     
+    // MARK: - Button Stack View
     private let buttonWidthScale: CGFloat = 0.6
     private let textFieldWidthScale: CGFloat = 0.9
     private let stackPadding: CGFloat = 12
     
     private lazy var signInButton: UIButton = {
-        let signInButton = Theme.getButton(title: "Sign In")
-        signInButton.setTitleColor(UIColor.clear, for: .disabled)
-        signInButton.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
+        let title = NSLocalizedString("Sign In", comment: "")
+        let signInButton = self.getButton(title: title)
         signInButton.layer.backgroundColor = Theme.keyColor.cgColor
+        signInButton.addTarget(self, action: #selector(signInButtonPressed), for: .touchUpInside)
         return signInButton
     }()
     
     private lazy var signUpButton: UIButton = {
-        let signUpButton = Theme.getButton(title: "Sign Up")
-        signUpButton.setTitleColor(UIColor.clear, for: .disabled)
-        signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
+        let title = NSLocalizedString("Sign Up", comment: "")
+        let signUpButton = self.getButton(title: title)
         signUpButton.layer.backgroundColor = Theme.keyColor.cgColor
+        signUpButton.addTarget(self, action: #selector(signUpButtonPressed), for: .touchUpInside)
         return signUpButton
     }()
     
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         
-        let signInButton = self.signInButton
-        stackView.addArrangedSubview(signInButton)
-        let signUpButton = self.signUpButton
-        stackView.addArrangedSubview(signUpButton)
+        stackView.addArrangedSubview(self.signInButton)
+        stackView.addArrangedSubview(self.signUpButton)
         
         var constraints: [NSLayoutConstraint] = []
         for view in stackView.arrangedSubviews {
@@ -120,6 +126,61 @@ class AuthenticationViewController: UIViewController {
         return stackView
     }()
     
+    // MARK: - Sign In Stack View
+    private lazy var signInEmailTextField: UITextField = {
+        let placeholder = NSLocalizedString("Email", comment: "")
+        let textField = self.getTextField(placeholder: placeholder, forPassword: false)
+        return textField
+    }()
+    
+    private lazy var signInPasswordTextField: UITextField = {
+        let placeholder = NSLocalizedString("Password", comment: "")
+        let textField = self.getTextField(placeholder: placeholder, forPassword: true)
+        return textField
+    }()
+    
+    private lazy var attemptSignInButton: UIButton = {
+        let title = NSLocalizedString("Sign In", comment: "")
+        let signInButton = self.getButton(title: title)
+        signInButton.layer.backgroundColor = Theme.keyColor.cgColor
+        signInButton.addTarget(self, action: #selector(attemptSignInButtonPressed), for: .touchUpInside)
+        return signInButton
+    }()
+    
+    private lazy var signInStackView: UIStackView = {
+        let stackView = UIStackView()
+        
+        stackView.addArrangedSubview(self.signInEmailTextField)
+        stackView.addArrangedSubview(self.signInPasswordTextField)
+        stackView.addArrangedSubview(self.attemptSignInButton)
+        
+        self.configure(stackView)
+        return stackView
+    }()
+    
+    private func configure(_ stackView: UIStackView) {
+        var constraints: [NSLayoutConstraint] = []
+        for view in stackView.arrangedSubviews {
+            if view is UIButton {
+                let buttonWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.buttonWidthScale, constant: 0)
+                constraints.append(buttonWidthConstraint)
+            } else if view is UITextField {
+                let textFieldWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.textFieldWidthScale, constant: 0)
+                constraints.append(textFieldWidthConstraint)
+            } else {
+                let widthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: 1, constant: 0)
+                constraints.append(widthConstraint)
+            }
+        }
+        stackView.addConstraints(constraints)
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+        stackView.spacing = self.stackPadding
+    }
+    
+    // MARK: - View
     private lazy var myView: View = {
         let view = View(scrollView: scrollView, stackView: buttonStackView)
         return view
@@ -154,6 +215,8 @@ class AuthenticationViewController: UIViewController {
             currentStackView.frame = layout.stackViewFrame
             scrollView.contentSize = layout.contentSize
             scrollView.frame = layout.scrollViewFrame
+            
+            self.addSubview(currentStackView)
         }
         
         private func layout(in bounds: CGRect) -> Layout {
@@ -186,5 +249,24 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
+}
+
+extension AuthenticationViewController {
+    
+    private func getButton(title: String) -> UIButton {
+        let button = Theme.getButton(title: title)
+        button.setTitleColor(UIColor.clear, for: .disabled)
+        return button
+    }
+    
+    private func getTextField(placeholder: String, forPassword: Bool, withAutoCorrection: Bool = false) -> UITextField {
+        let textField = Theme.getTextField(placeholder: placeholder)
+        textField.autocorrectionType = withAutoCorrection ? .default : .no
+        textField.autocapitalizationType = .none
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.isSecureTextEntry = forPassword
+        textField.setContentHuggingPriority(UILayoutPriority.required, for: .vertical)
+        return textField
+    }
     
 }
