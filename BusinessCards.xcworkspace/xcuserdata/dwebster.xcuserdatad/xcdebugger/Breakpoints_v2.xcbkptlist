@@ -14,8 +14,8 @@
             filePath = "BusinessCards/AuthenticationViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
+            startingLineNumber = "176"
+            endingLineNumber = "176"
             landmarkName = "attemptSignUpButtonPressed()"
             landmarkType = "7">
          </BreakpointContent>

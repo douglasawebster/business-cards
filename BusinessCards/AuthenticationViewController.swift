@@ -11,6 +11,17 @@ import Firebase
 
 class AuthenticationViewController: UIViewController {
     
+    init(rootViewController: RootViewController) {
+        self.rootViewController = rootViewController
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    let rootViewController: RootViewController
+    
     public override func loadView() {
         self.view = myView
     }
@@ -95,11 +106,12 @@ class AuthenticationViewController: UIViewController {
         if let email = signInEmailTextField.text, !email.isEmpty,
            let password = signInPasswordTextField.text, !password.isEmpty {
             Auth.auth().signIn(withEmail: email, password: password) { (signInResult, error) in
-                if let error = error {
+                if let _ = signInResult {
+                    self.rootViewController.update(user: signInResult?.user, caller: self)
+                    self.setSignInError("")
+                } else if let error = error {
                     let errorString = self.errorString(for: error)
                     self.setSignInError(errorString)
-                } else if let _ = signInResult {
-                    self.setSignInError("")
                 }
             }
         } else {
@@ -140,13 +152,31 @@ class AuthenticationViewController: UIViewController {
            let password = signUpPasswordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
            !password.isEmpty {
             Auth.auth().createUser(withEmail: email, password: password) { (signUpResult, error) in
-                if let error = error {
+                
+                if let signUpResult = signUpResult {
+                    let user = UserMetadata(firstName: firstName, lastName: lastName)
+                    
+                    let ref: DatabaseReference = Database.database().reference()
+                    let uid = signUpResult.user.uid
+                    
+                    let userPublicMetadata = user.publicMetadata()
+                    let userPrivateMetadata = user.privateMetadata()
+                    
+                    let userObject = [
+                        uid : [
+                            "public" : userPublicMetadata,
+                            "private" : userPrivateMetadata
+                        ]
+                    ]
+                                        
+                    ref.child("users").updateChildValues(userObject)
+                                        
+                    self.setSignUpError("")
+                } else if let error = error {
                     let errorString = self.errorString(for: error)
                     self.setSignUpError(errorString)
                 }
-                else if let _ = signUpResult {
-                    self.setSignUpError("")
-                }
+                    
             }
         } else {
             let needsFirstName = (signUpFirstNameTextField.text ?? "").isEmpty

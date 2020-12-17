@@ -1,0 +1,67 @@
+{
+  "cards" : {
+    "card-id" : {
+      "address" : "2111 Via Don Benito",
+      "companyName" : "Business Cards",
+      "email" : "douglaswebster98@gmail.com",
+      "fax" : "123-456-7890",
+      "firstName" : "Douglas",
+      "lastName" : "Webster",
+      "logoId" : "logo-id",
+      "middleName" : "Alan",
+      "phoneNumber" : "123-456-7890",
+      "position" : "CEO",
+      "userId" : "user-id",
+      "websiteURL" : "www.businessCards.com"
+    }
+  },
+  "logos" : {
+    "logo-id" : {
+      "logo" : "image"
+    }
+  },
+  "tagSets" : {
+    "tag-set-id" : {
+      "cards" : {
+        "card-id" : "tag-id"
+      },
+      "tags" : {
+        "tag-id" : {
+          "tagName" : "Computer"
+        }
+      },
+      "walletId" : "wallet-id"
+    }
+  },
+  "users" : {
+    "user-id" : {
+      "private" : {
+        "wallet" : "wallet-id"
+      },
+      "public" : {
+        "cards" : {
+          "card-id" : true
+        },
+        "name" : {
+          "firstName" : "Douglas",
+          "lastName" : "Webster"
+        }
+      }
+    }
+  },
+  "wallets" : {
+    "wallet-id" : {
+      "cards" : {
+        "card-id" : {
+          "tags" : {
+            "tag-id" : true
+          }
+        }
+      },
+      "tagSets" : {
+        "tag-set-id" : true
+      },
+      "userId" : "user-id"
+    }
+  }
+}
