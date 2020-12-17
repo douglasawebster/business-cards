@@ -38,9 +38,9 @@ class AuthenticationViewController: UIViewController {
         case .buttons:
             incomingStackView = buttonStackView
         case .signIn:
-            incomingStackView = signInStackView //incomingStackView = signInStackView
+            incomingStackView = signInStackView
         case .signUp:
-            return //incomingStackView = signUpStackView
+            incomingStackView = signUpStackView
         case .forgotPassword:
             return //incomingStackView = forgotPasswordStackView
         }
@@ -60,6 +60,28 @@ class AuthenticationViewController: UIViewController {
         self.myView.setNeedsLayout()
     }
     
+    private func configure(_ stackView: UIStackView) {
+        var constraints: [NSLayoutConstraint] = []
+        for view in stackView.arrangedSubviews {
+            if view is UIButton {
+                let buttonWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.buttonWidthScale, constant: 0)
+                constraints.append(buttonWidthConstraint)
+            } else if view is UITextField {
+                let textFieldWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.textFieldWidthScale, constant: 0)
+                constraints.append(textFieldWidthConstraint)
+            } else {
+                let widthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: 1, constant: 0)
+                constraints.append(widthConstraint)
+            }
+        }
+        stackView.addConstraints(constraints)
+        
+        stackView.axis = .vertical
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
+        stackView.spacing = self.stackPadding
+    }
+    
     @objc private func signInButtonPressed() {
         self.setState(.signIn)
     }
@@ -71,6 +93,14 @@ class AuthenticationViewController: UIViewController {
     @objc private func attemptSignInButtonPressed() {
         print("Email: " + (signInEmailTextField.text ?? "No Email"))
         print("Password: " + (signInPasswordTextField.text ?? "No Password"))
+        return
+    }
+    
+    @objc private func attemptSignUpButtonPressed() {
+        print("First Name: " + (signUpFirstNameTextField.text ?? "No First Name"))
+        print("Last Name: " + (signUpLastNameTextField.text ?? "No Last Name"))
+        print("Email: " + (signUpEmailTextField.text ?? "No Email"))
+        print("Password: " + (signUpPasswordTextField.text ?? "No Password"))
         return
     }
     
@@ -158,27 +188,52 @@ class AuthenticationViewController: UIViewController {
         return stackView
     }()
     
-    private func configure(_ stackView: UIStackView) {
-        var constraints: [NSLayoutConstraint] = []
-        for view in stackView.arrangedSubviews {
-            if view is UIButton {
-                let buttonWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.buttonWidthScale, constant: 0)
-                constraints.append(buttonWidthConstraint)
-            } else if view is UITextField {
-                let textFieldWidthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: self.textFieldWidthScale, constant: 0)
-                constraints.append(textFieldWidthConstraint)
-            } else {
-                let widthConstraint = NSLayoutConstraint(item: view, attribute: .width, relatedBy: .equal, toItem: stackView, attribute: .width, multiplier: 1, constant: 0)
-                constraints.append(widthConstraint)
-            }
-        }
-        stackView.addConstraints(constraints)
+    // MARK: - Sign Up Stack View
+    private lazy var signUpFirstNameTextField: UITextField = {
+        let placeholder = NSLocalizedString("First Name", comment: "")
+        let textField = self.getTextField(placeholder: placeholder, forPassword: false)
+        return textField
+    }()
+    
+    private lazy var signUpLastNameTextField: UITextField = {
+        let placeholder = NSLocalizedString("Last Name", comment: "")
+        let textField = self.getTextField(placeholder: placeholder, forPassword: false)
+        return textField
+    }()
+    
+    private lazy var signUpEmailTextField: UITextField = {
+        let placeholder = NSLocalizedString("Email", comment: "")
+        let textField = self.getTextField(placeholder: placeholder, forPassword: false)
+        return textField
+    }()
+    
+    private lazy var signUpPasswordTextField: UITextField = {
+        let placeholder = NSLocalizedString("Password", comment: "")
+        let textField = self.getTextField(placeholder: placeholder, forPassword: true)
+        return textField
+    }()
+    
+    private lazy var attemptSignUpButton: UIButton = {
+        let title = NSLocalizedString("Sign Up", comment: "")
+        let signUpButton = self.getButton(title: title)
+        signUpButton.layer.backgroundColor = Theme.keyColor.cgColor
+        signUpButton.addTarget(self, action: #selector(attemptSignUpButtonPressed), for: .touchUpInside)
+        return signUpButton
+
+    }()
+    
+    private lazy var signUpStackView: UIStackView = {
+        let stackView = UIStackView()
         
-        stackView.axis = .vertical
-        stackView.distribution = .equalCentering
-        stackView.alignment = .center
-        stackView.spacing = self.stackPadding
-    }
+        stackView.addArrangedSubview(self.signUpFirstNameTextField)
+        stackView.addArrangedSubview(self.signUpLastNameTextField)
+        stackView.addArrangedSubview(self.signUpEmailTextField)
+        stackView.addArrangedSubview(self.signUpPasswordTextField)
+        stackView.addArrangedSubview(self.attemptSignUpButton)
+        
+        self.configure(stackView)
+        return stackView
+    }()
     
     // MARK: - View
     private lazy var myView: View = {
