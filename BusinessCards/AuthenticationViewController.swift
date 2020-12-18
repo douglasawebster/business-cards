@@ -381,8 +381,8 @@ class AuthenticationViewController: UIViewController {
             
             super.init(frame: .zero)
             
-            self.addSubview(scrollView)
-            self.addSubview(currentStackView)
+            self.addSubview(self.scrollView)
+            self.addSubview(self.currentStackView)
         }
         
         required init?(coder: NSCoder) {
@@ -408,7 +408,7 @@ class AuthenticationViewController: UIViewController {
         }
         
         private func layout(in bounds: CGRect) -> Layout {
-            let stackViewWidth: CGFloat = 400.0 //min(bounds.width * 0.8, 400)
+            let stackViewWidth: CGFloat = min(bounds.width * 0.8, 400)
             
             for view in currentStackView.arrangedSubviews {
                 if let label = view as? UILabel {

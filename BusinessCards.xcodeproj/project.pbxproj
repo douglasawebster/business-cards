@@ -21,6 +21,9 @@
 		DFC1B8D8258BDA86008752DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8D7258BDA86008752DB /* User.swift */; };
 		DFC1B8E3258BFD01008752DB /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8E2258BFD01008752DB /* RootViewController.swift */; };
 		DFC1B8E8258C043F008752DB /* UserRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8E7258C043F008752DB /* UserRootViewController.swift */; };
+		DFC1B8ED258C24A0008752DB /* CardDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8EC258C24A0008752DB /* CardDetailViewController.swift */; };
+		DFC1B8F2258C28AB008752DB /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8F1258C28AA008752DB /* WalletViewController.swift */; };
+		DFC1B8F7258C821F008752DB /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8F6258C821F008752DB /* CardTableViewCell.swift */; };
 		DFEC5A60258AE38B008C420E /* PaddingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,9 @@
 		DFC1B8D7258BDA86008752DB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DFC1B8E2258BFD01008752DB /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		DFC1B8E7258C043F008752DB /* UserRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserRootViewController.swift; path = Pods/UserRootViewController.swift; sourceTree = SOURCE_ROOT; };
+		DFC1B8EC258C24A0008752DB /* CardDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailViewController.swift; sourceTree = "<group>"; };
+		DFC1B8F1258C28AA008752DB /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		DFC1B8F6258C821F008752DB /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
 		DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,7 +133,10 @@
 		DFAE41D125840E7C0077D893 /* BusinessCards */ = {
 			isa = PBXGroup;
 			children = (
+				DFC1B8F6258C821F008752DB /* CardTableViewCell.swift */,
+				DFC1B8F1258C28AA008752DB /* WalletViewController.swift */,
 				DFC1B8E7258C043F008752DB /* UserRootViewController.swift */,
+				DFC1B8EC258C24A0008752DB /* CardDetailViewController.swift */,
 				DFAE41D225840E7C0077D893 /* AppDelegate.swift */,
 				DFAE41D425840E7C0077D893 /* SceneDelegate.swift */,
 				DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */,
@@ -372,13 +381,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFEC5A60258AE38B008C420E /* PaddingTextField.swift in Sources */,
+				DFC1B8F7258C821F008752DB /* CardTableViewCell.swift in Sources */,
 				DFC1B8E8258C043F008752DB /* UserRootViewController.swift in Sources */,
 				DFAE41D325840E7C0077D893 /* AppDelegate.swift in Sources */,
 				DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */,
+				DFC1B8ED258C24A0008752DB /* CardDetailViewController.swift in Sources */,
 				DFC1B8E3258BFD01008752DB /* RootViewController.swift in Sources */,
 				DFAE421325840EF80077D893 /* Theme.swift in Sources */,
 				DFAE41D525840E7C0077D893 /* SceneDelegate.swift in Sources */,
 				DFC1B8D8258BDA86008752DB /* User.swift in Sources */,
+				DFC1B8F2258C28AB008752DB /* WalletViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,8 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let navigationController = UINavigationController(rootViewController: RootViewController())
-            
+            let navigationController = RootViewController()
             
             let navigationBarTextAttributes = [
                 NSAttributedString.Key.foregroundColor : UIColor.white
