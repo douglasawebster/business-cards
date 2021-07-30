@@ -44,8 +44,11 @@ typedef void (^FIRUserUpdateCallback)(NSError *_Nullable error) NS_SWIFT_NAME(Us
 /** @typedef FIRAuthStateDidChangeListenerHandle
     @brief The type of handle returned by `FIRAuth.addAuthStateDidChangeListener:`.
  */
+// clang-format off
+// clang-format12 merges the next two lines.
 typedef id<NSObject> FIRAuthStateDidChangeListenerHandle
     NS_SWIFT_NAME(AuthStateDidChangeListenerHandle);
+// clang-format on
 
 /** @typedef FIRAuthStateDidChangeListenerBlock
     @brief The type of block which can be registered as a listener for auth state did change events.
@@ -59,8 +62,11 @@ typedef void (^FIRAuthStateDidChangeListenerBlock)(FIRAuth *auth, FIRUser *_Null
 /** @typedef FIRIDTokenDidChangeListenerHandle
     @brief The type of handle returned by `FIRAuth.addIDTokenDidChangeListener:`.
  */
+// clang-format off
+// clang-format12 merges the next two lines.
 typedef id<NSObject> FIRIDTokenDidChangeListenerHandle
     NS_SWIFT_NAME(IDTokenDidChangeListenerHandle);
+// clang-format on
 
 /** @typedef FIRIDTokenDidChangeListenerBlock
     @brief The type of block which can be registered as a listener for ID token did change events.
@@ -95,8 +101,11 @@ extern const NSNotificationName FIRAuthStateDidChangeNotification NS_SWIFT_NAME(
         changes (for example, a new token has been produced, a user signs in or signs out). The
         object parameter of the notification is the sender `FIRAuth` instance.
  */
+// clang-format off
+// clang-format12 merges the next two lines.
 extern NSString *const FIRAuthStateDidChangeNotification
     NS_SWIFT_NAME(AuthStateDidChangeNotification);
+// clang-format off
 #endif  // defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 
 /** @typedef FIRAuthResultCallback
@@ -176,19 +185,6 @@ typedef void (^FIRApplyActionCodeCallback)(NSError *_Nullable error)
 
 typedef void (^FIRAuthVoidErrorCallback)(NSError *_Nullable) NS_SWIFT_NAME(AuthVoidErrorCallback);
 
-/**
-    @brief Deprecated. Please directly use email or previousEmail properties instead.
-  */
-typedef NS_ENUM(NSInteger, FIRActionDataKey) {
-  /** Deprecated. Please directly use email property instead.  */
-  FIRActionCodeEmailKey = 0,
-
-  /** Deprecated. Please directly use previousEmail property instead. */
-  FIRActionCodeFromEmailKey = 1,
-
-} NS_SWIFT_NAME(ActionDataKey)
-    DEPRECATED_MSG_ATTRIBUTE("Please directly use email or previousEmail properties instead.");
-
 /** @class FIRActionCodeInfo
     @brief Manages information regarding action codes.
  */
@@ -226,12 +222,6 @@ typedef NS_ENUM(NSInteger, FIRActionCodeOperation) {
     @brief The operation being performed.
  */
 @property(nonatomic, readonly) FIRActionCodeOperation operation;
-
-/** @fn dataForKey:
-    @brief Deprecated. Please directly use email or previousEmail properties instead.
- */
-- (NSString *)dataForKey:(FIRActionDataKey)key
-    DEPRECATED_MSG_ATTRIBUTE("Please directly use email or previousEmail properties instead.");
 
 /** @property email
     @brief The email address to which the code was sent. The new email address in the case of
@@ -359,6 +349,19 @@ NS_SWIFT_NAME(Auth)
  */
 @property(readonly, nonatomic, copy, nullable) NSString *userAccessGroup;
 
+/** @property shareAuthStateAcrossDevices
+    @brief Contains shareAuthStateAcrossDevices setting related to the auth object.
+    @remarks If userAccessGroup is not set, setting shareAuthStateAcrossDevices will
+        have no effect. You should set shareAuthStateAcrossDevices to it's desired
+        state and then set the userAccessGroup after.
+ */
+@property(nonatomic) BOOL shareAuthStateAcrossDevices;
+
+/** @property tenantID
+    @brief The tenant ID of the auth instance. nil if none is available.
+ */
+@property(nonatomic, copy, nullable) NSString *tenantID;
+
 #if TARGET_OS_IOS
 /** @property APNSToken
     @brief The APNs token used for phone number authentication. The type of the token (production
@@ -380,16 +383,8 @@ NS_SWIFT_NAME(Auth)
     @param completion Optionally; a block invoked after the user of the calling Auth instance has
         been updated or an error was encountered.
  */
-- (void)updateCurrentUser:(FIRUser *)user completion:(nullable FIRUserUpdateCallback)completion;
-
-/** @fn fetchProvidersForEmail:completion:
-    @brief Please use fetchSignInMethodsForEmail:completion: for Objective-C or
-        fetchSignInMethods(forEmail:completion:) for Swift instead.
- */
-- (void)fetchProvidersForEmail:(NSString *)email
-                    completion:(nullable FIRProviderQueryCallback)completion
-    DEPRECATED_MSG_ATTRIBUTE("Please use fetchSignInMethodsForEmail:completion: for Objective-C or "
-                             "fetchSignInMethods(forEmail:completion:) for Swift instead.");
+- (void)updateCurrentUser:(FIRUser *)user
+               completion:(nullable void (^)(NSError *_Nullable error))completion;
 
 /** @fn fetchSignInMethodsForEmail:completion:
     @brief Fetches the list of all sign-in methods previously used for the provided email address.
@@ -407,7 +402,8 @@ NS_SWIFT_NAME(Auth)
  */
 
 - (void)fetchSignInMethodsForEmail:(NSString *)email
-                        completion:(nullable FIRSignInMethodQueryCallback)completion;
+                        completion:(nullable void (^)(NSArray<NSString *> *_Nullable,
+                                                      NSError *_Nullable))completion;
 
 /** @fn signInWithEmail:password:completion:
     @brief Signs in using an email address and password.
@@ -432,7 +428,8 @@ NS_SWIFT_NAME(Auth)
  */
 - (void)signInWithEmail:(NSString *)email
                password:(NSString *)password
-             completion:(nullable FIRAuthDataResultCallback)completion;
+             completion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                           NSError *_Nullable error))completion;
 
 /** @fn signInWithEmail:link:completion:
     @brief Signs in using an email address and email sign-in link.
@@ -456,7 +453,9 @@ NS_SWIFT_NAME(Auth)
 
 - (void)signInWithEmail:(NSString *)email
                    link:(NSString *)link
-             completion:(nullable FIRAuthDataResultCallback)completion;
+             completion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                           NSError *_Nullable error))completion
+    API_UNAVAILABLE(watchos);
 
 /** @fn signInWithProvider:UIDelegate:completion:
     @brief Signs in using the provided auth provider instance.
@@ -504,16 +503,9 @@ NS_SWIFT_NAME(Auth)
  */
 - (void)signInWithProvider:(id<FIRFederatedAuthProvider>)provider
                 UIDelegate:(nullable id<FIRAuthUIDelegate>)UIDelegate
-                completion:(nullable FIRAuthDataResultCallback)completion;
-
-/** @fn signInAndRetrieveDataWithCredential:completion:
-    @brief Please use signInWithCredential:completion: for Objective-C or "
-        "signIn(with:completion:) for Swift instead.
- */
-- (void)signInAndRetrieveDataWithCredential:(FIRAuthCredential *)credential
-                                 completion:(nullable FIRAuthDataResultCallback)completion
-    DEPRECATED_MSG_ATTRIBUTE("Please use signInWithCredential:completion: for Objective-C or "
-                             "signIn(with:completion:) for Swift instead.");
+                completion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                              NSError *_Nullable error))completion
+    API_UNAVAILABLE(watchos);
 
 /** @fn signInWithCredential:completion:
     @brief Asynchronously signs in to Firebase with the given 3rd-party credentials (e.g. a Facebook
@@ -554,7 +546,8 @@ NS_SWIFT_NAME(Auth)
     @remarks See `FIRAuthErrors` for a list of error codes that are common to all API methods
 */
 - (void)signInWithCredential:(FIRAuthCredential *)credential
-                  completion:(nullable FIRAuthDataResultCallback)completion;
+                  completion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                                NSError *_Nullable error))completion;
 
 /** @fn signInAnonymouslyWithCompletion:
     @brief Asynchronously creates and becomes an anonymous user.
@@ -571,7 +564,8 @@ NS_SWIFT_NAME(Auth)
 
     @remarks See `FIRAuthErrors` for a list of error codes that are common to all API methods.
  */
-- (void)signInAnonymouslyWithCompletion:(nullable FIRAuthDataResultCallback)completion;
+- (void)signInAnonymouslyWithCompletion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                                           NSError *_Nullable error))completion;
 
 /** @fn signInWithCustomToken:completion:
     @brief Asynchronously signs in to Firebase with the given Auth token.
@@ -590,7 +584,8 @@ NS_SWIFT_NAME(Auth)
     @remarks See `FIRAuthErrors` for a list of error codes that are common to all API methods.
  */
 - (void)signInWithCustomToken:(NSString *)token
-                   completion:(nullable FIRAuthDataResultCallback)completion;
+                   completion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                                 NSError *_Nullable error))completion;
 
 /** @fn createUserWithEmail:password:completion:
     @brief Creates and, on success, signs in a user with the given email address and password.
@@ -616,7 +611,8 @@ NS_SWIFT_NAME(Auth)
  */
 - (void)createUserWithEmail:(NSString *)email
                    password:(NSString *)password
-                 completion:(nullable FIRAuthDataResultCallback)completion;
+                 completion:(nullable void (^)(FIRAuthDataResult *_Nullable authResult,
+                                               NSError *_Nullable error))completion;
 
 /** @fn confirmPasswordResetWithCode:newPassword:completion:
     @brief Resets the password given a code sent to the user outside of the app and a new password
@@ -639,7 +635,7 @@ NS_SWIFT_NAME(Auth)
  */
 - (void)confirmPasswordResetWithCode:(NSString *)code
                          newPassword:(NSString *)newPassword
-                          completion:(FIRConfirmPasswordResetCallback)completion;
+                          completion:(void (^)(NSError *_Nullable error))completion;
 
 /** @fn checkActionCode:completion:
     @brief Checks the validity of an out of band code.
@@ -658,7 +654,8 @@ NS_SWIFT_NAME(Auth)
         asynchronously on the main thread in the future.
  */
 - (void)verifyPasswordResetCode:(NSString *)code
-                     completion:(FIRVerifyPasswordResetCodeCallback)completion;
+                     completion:
+                         (void (^)(NSString *_Nullable email, NSError *_Nullable error))completion;
 
 /** @fn applyActionCode:completion:
     @brief Applies out of band code.
@@ -670,7 +667,7 @@ NS_SWIFT_NAME(Auth)
     @remarks This method will not work for out of band codes which require an additional parameter,
         such as password reset code.
  */
-- (void)applyActionCode:(NSString *)code completion:(FIRApplyActionCodeCallback)completion;
+- (void)applyActionCode:(NSString *)code completion:(void (^)(NSError *_Nullable error))completion;
 
 /** @fn sendPasswordResetWithEmail:completion:
     @brief Initiates a password reset for the given email address.
@@ -691,7 +688,7 @@ NS_SWIFT_NAME(Auth)
 
  */
 - (void)sendPasswordResetWithEmail:(NSString *)email
-                        completion:(nullable FIRSendPasswordResetCallback)completion;
+                        completion:(nullable void (^)(NSError *_Nullable error))completion;
 
 /** @fn sendPasswordResetWithEmail:actionCodeSetting:completion:
     @brief Initiates a password reset for the given email address and @FIRActionCodeSettings object.
@@ -715,7 +712,7 @@ NS_SWIFT_NAME(Auth)
         + `FIRAuthErrorCodeMissingAndroidPackageName` - Indicates that the android package name
             is missing when the `androidInstallApp` flag is set to true.
         + `FIRAuthErrorCodeUnauthorizedDomain` - Indicates that the domain specified in the
-            continue URL is not whitelisted in the Firebase console.
+            continue URL is not allowlisted in the Firebase console.
         + `FIRAuthErrorCodeInvalidContinueURI` - Indicates that the domain specified in the
             continue URI is not valid.
 
@@ -723,7 +720,7 @@ NS_SWIFT_NAME(Auth)
  */
 - (void)sendPasswordResetWithEmail:(NSString *)email
                 actionCodeSettings:(FIRActionCodeSettings *)actionCodeSettings
-                        completion:(nullable FIRSendPasswordResetCallback)completion;
+                        completion:(nullable void (^)(NSError *_Nullable error))completion;
 
 /** @fn sendSignInLinkToEmail:actionCodeSettings:completion:
     @brief Sends a sign in with email link to provided email address.
@@ -736,7 +733,8 @@ NS_SWIFT_NAME(Auth)
  */
 - (void)sendSignInLinkToEmail:(NSString *)email
            actionCodeSettings:(FIRActionCodeSettings *)actionCodeSettings
-                   completion:(nullable FIRSendSignInLinkToEmailCallback)completion;
+                   completion:(nullable void (^)(NSError *_Nullable error))completion
+    API_UNAVAILABLE(watchos);
 
 /** @fn signOut:
     @brief Signs out the current user.
@@ -751,8 +749,6 @@ NS_SWIFT_NAME(Auth)
             keychain. The `NSLocalizedFailureReasonErrorKey` field in the `NSError.userInfo`
             dictionary will contain more information about the error encountered.
 
-
-
  */
 - (BOOL)signOut:(NSError *_Nullable *_Nullable)error;
 
@@ -762,7 +758,7 @@ NS_SWIFT_NAME(Auth)
     @param link The email sign-in link.
     @return @YES when the link passed matches the expected format of an email sign-in link.
  */
-- (BOOL)isSignInWithEmailLink:(NSString *)link;
+- (BOOL)isSignInWithEmailLink:(NSString *)link API_UNAVAILABLE(watchos);
 
 /** @fn addAuthStateDidChangeListener:
     @brief Registers a block as an "auth state did change" listener. To be invoked when:
@@ -782,8 +778,9 @@ NS_SWIFT_NAME(Auth)
 
     @return A handle useful for manually unregistering the block as a listener.
  */
+
 - (FIRAuthStateDidChangeListenerHandle)addAuthStateDidChangeListener:
-    (FIRAuthStateDidChangeListenerBlock)listener;
+    (void (^)(FIRAuth *auth, FIRUser *_Nullable user))listener;
 
 /** @fn removeAuthStateDidChangeListener:
     @brief Unregisters a block as an "auth state did change" listener.
@@ -812,7 +809,7 @@ NS_SWIFT_NAME(Auth)
     @return A handle useful for manually unregistering the block as a listener.
  */
 - (FIRIDTokenDidChangeListenerHandle)addIDTokenDidChangeListener:
-    (FIRIDTokenDidChangeListenerBlock)listener;
+    (void (^)(FIRAuth *auth, FIRUser *_Nullable user))listener;
 
 /** @fn removeIDTokenDidChangeListener:
     @brief Unregisters a block as an "ID token did change" listener.
@@ -825,6 +822,11 @@ NS_SWIFT_NAME(Auth)
     @brief Sets `languageCode` to the app's current language.
  */
 - (void)useAppLanguage;
+
+/** @fn useEmulatorWithHost:port
+    @brief Configures Firebase Auth to connect to an emulated host instead of the remote backend.
+ */
+- (void)useEmulatorWithHost:(NSString *)host port:(NSInteger)port;
 
 #if TARGET_OS_IOS
 

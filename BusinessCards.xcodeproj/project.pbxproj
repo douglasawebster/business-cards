@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0146FE0AD55540EEE3E280C7 /* Pods_BusinessCards.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16B13940AC20EB4A7BA17DD9 /* Pods_BusinessCards.framework */; };
+		DF01A39526B36D860003BBFB /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF01A39426B36D860003BBFB /* RootViewController.swift */; };
+		DF01A39926B378BD0003BBFB /* UserRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF01A39826B378BD0003BBFB /* UserRootViewController.swift */; };
+		DF01A39B26B3796E0003BBFB /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF01A39A26B3796E0003BBFB /* AuthViewController.swift */; };
+		DF01A39E26B384D50003BBFB /* AuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF01A39D26B384D50003BBFB /* AuthProvider.swift */; };
 		DF06D68225841DA3002649EA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF06D68125841DA3002649EA /* GoogleService-Info.plist */; };
 		DFAE41D325840E7C0077D893 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE41D225840E7C0077D893 /* AppDelegate.swift */; };
 		DFAE41D525840E7C0077D893 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE41D425840E7C0077D893 /* SceneDelegate.swift */; };
@@ -16,15 +20,9 @@
 		DFAE41DF25840E7E0077D893 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFAE41DD25840E7E0077D893 /* LaunchScreen.storyboard */; };
 		DFAE41EA25840E7E0077D893 /* BusinessCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE41E925840E7E0077D893 /* BusinessCardsTests.swift */; };
 		DFAE41F525840E7F0077D893 /* BusinessCardsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE41F425840E7F0077D893 /* BusinessCardsUITests.swift */; };
-		DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */; };
 		DFAE421325840EF80077D893 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFAE421225840EF80077D893 /* Theme.swift */; };
-		DFC1B8D8258BDA86008752DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8D7258BDA86008752DB /* User.swift */; };
-		DFC1B8E3258BFD01008752DB /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8E2258BFD01008752DB /* RootViewController.swift */; };
-		DFC1B8E8258C043F008752DB /* UserRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8E7258C043F008752DB /* UserRootViewController.swift */; };
-		DFC1B8ED258C24A0008752DB /* CardDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8EC258C24A0008752DB /* CardDetailViewController.swift */; };
-		DFC1B8F2258C28AB008752DB /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8F1258C28AA008752DB /* WalletViewController.swift */; };
-		DFC1B8F7258C821F008752DB /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC1B8F6258C821F008752DB /* CardTableViewCell.swift */; };
-		DFEC5A60258AE38B008C420E /* PaddingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */; };
+		DFF6A68D26B47CA400055F01 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF6A68C26B47CA400055F01 /* SwiftExtensions.swift */; };
+		DFF6A68F26B486BF00055F01 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF6A68E26B486BF00055F01 /* Protocols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +46,10 @@
 		16B13940AC20EB4A7BA17DD9 /* Pods_BusinessCards.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BusinessCards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		590369243E44ABC0678C144C /* Pods-BusinessCards.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BusinessCards.release.xcconfig"; path = "Target Support Files/Pods-BusinessCards/Pods-BusinessCards.release.xcconfig"; sourceTree = "<group>"; };
 		9CF77B3BCDAD3246C093CBD0 /* Pods-BusinessCards.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BusinessCards.debug.xcconfig"; path = "Target Support Files/Pods-BusinessCards/Pods-BusinessCards.debug.xcconfig"; sourceTree = "<group>"; };
+		DF01A39426B36D860003BBFB /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		DF01A39826B378BD0003BBFB /* UserRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRootViewController.swift; sourceTree = "<group>"; };
+		DF01A39A26B3796E0003BBFB /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		DF01A39D26B384D50003BBFB /* AuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProvider.swift; sourceTree = "<group>"; };
 		DF06D68125841DA3002649EA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DFAE41CF25840E7C0077D893 /* BusinessCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BusinessCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFAE41D225840E7C0077D893 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,15 +64,9 @@
 		DFAE41F025840E7F0077D893 /* BusinessCardsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BusinessCardsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFAE41F425840E7F0077D893 /* BusinessCardsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessCardsUITests.swift; sourceTree = "<group>"; };
 		DFAE41F625840E7F0077D893 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		DFAE421225840EF80077D893 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		DFC1B8D7258BDA86008752DB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		DFC1B8E2258BFD01008752DB /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		DFC1B8E7258C043F008752DB /* UserRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserRootViewController.swift; path = Pods/UserRootViewController.swift; sourceTree = SOURCE_ROOT; };
-		DFC1B8EC258C24A0008752DB /* CardDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailViewController.swift; sourceTree = "<group>"; };
-		DFC1B8F1258C28AA008752DB /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
-		DFC1B8F6258C821F008752DB /* CardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
-		DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingTextField.swift; sourceTree = "<group>"; };
+		DFF6A68C26B47CA400055F01 /* SwiftExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftExtensions.swift; sourceTree = "<group>"; };
+		DFF6A68E26B486BF00055F01 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,17 +129,15 @@
 		DFAE41D125840E7C0077D893 /* BusinessCards */ = {
 			isa = PBXGroup;
 			children = (
-				DFC1B8F6258C821F008752DB /* CardTableViewCell.swift */,
-				DFC1B8F1258C28AA008752DB /* WalletViewController.swift */,
-				DFC1B8E7258C043F008752DB /* UserRootViewController.swift */,
-				DFC1B8EC258C24A0008752DB /* CardDetailViewController.swift */,
 				DFAE41D225840E7C0077D893 /* AppDelegate.swift */,
 				DFAE41D425840E7C0077D893 /* SceneDelegate.swift */,
-				DFAE420825840EBD0077D893 /* AuthenticationViewController.swift */,
-				DFC1B8E2258BFD01008752DB /* RootViewController.swift */,
+				DF01A39426B36D860003BBFB /* RootViewController.swift */,
+				DF01A39D26B384D50003BBFB /* AuthProvider.swift */,
+				DFF6A68C26B47CA400055F01 /* SwiftExtensions.swift */,
+				DF01A39A26B3796E0003BBFB /* AuthViewController.swift */,
+				DFF6A68E26B486BF00055F01 /* Protocols.swift */,
+				DF01A39826B378BD0003BBFB /* UserRootViewController.swift */,
 				DFAE421225840EF80077D893 /* Theme.swift */,
-				DFEC5A5F258AE38B008C420E /* PaddingTextField.swift */,
-				DFC1B8D7258BDA86008752DB /* User.swift */,
 				DFAE41D825840E7E0077D893 /* Assets.xcassets */,
 				DFAE41DD25840E7E0077D893 /* LaunchScreen.storyboard */,
 				DFAE41E025840E7E0077D893 /* Info.plist */,
@@ -199,7 +193,6 @@
 				DFAE41CC25840E7C0077D893 /* Frameworks */,
 				DFAE41CD25840E7C0077D893 /* Resources */,
 				76AC76B2F29B72D8660334A7 /* [CP] Embed Pods Frameworks */,
-				6CF97F2BBA6FB9055656F459 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -339,23 +332,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6CF97F2BBA6FB9055656F459 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BusinessCards/Pods-BusinessCards-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BusinessCards/Pods-BusinessCards-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BusinessCards/Pods-BusinessCards-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		76AC76B2F29B72D8660334A7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -380,17 +356,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DFEC5A60258AE38B008C420E /* PaddingTextField.swift in Sources */,
-				DFC1B8F7258C821F008752DB /* CardTableViewCell.swift in Sources */,
-				DFC1B8E8258C043F008752DB /* UserRootViewController.swift in Sources */,
 				DFAE41D325840E7C0077D893 /* AppDelegate.swift in Sources */,
-				DFAE420925840EBD0077D893 /* AuthenticationViewController.swift in Sources */,
-				DFC1B8ED258C24A0008752DB /* CardDetailViewController.swift in Sources */,
-				DFC1B8E3258BFD01008752DB /* RootViewController.swift in Sources */,
 				DFAE421325840EF80077D893 /* Theme.swift in Sources */,
+				DF01A39526B36D860003BBFB /* RootViewController.swift in Sources */,
+				DFF6A68F26B486BF00055F01 /* Protocols.swift in Sources */,
 				DFAE41D525840E7C0077D893 /* SceneDelegate.swift in Sources */,
-				DFC1B8D8258BDA86008752DB /* User.swift in Sources */,
-				DFC1B8F2258C28AB008752DB /* WalletViewController.swift in Sources */,
+				DF01A39E26B384D50003BBFB /* AuthProvider.swift in Sources */,
+				DFF6A68D26B47CA400055F01 /* SwiftExtensions.swift in Sources */,
+				DF01A39B26B3796E0003BBFB /* AuthViewController.swift in Sources */,
+				DF01A39926B378BD0003BBFB /* UserRootViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,69 +2,24 @@
 //  RootViewController.swift
 //  BusinessCards
 //
-//  Created by Douglas Webster on 12/17/20.
+//  Created by Douglas Webster on 7/29/21.
 //
 
 import Foundation
 import UIKit
-import FirebaseAuth
+import Firebase
 
 class RootViewController: UIViewController {
     
-    enum LoginResult {
-        case success(User)
-        case failure
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = Theme.backgroundColor
-        
-        let fireUser = Auth.auth().currentUser
-        let loginResult: LoginResult
-        if let user = fireUser {
-            loginResult = .success(user)
-        } else {
-            loginResult = .failure
-        }
-        self.updateCurrentViewController(loginResult: loginResult)
-     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        currentViewController?.view.frame = view.bounds
-    }
-    
-    func update(user: User?, caller: UIViewController) {
-        caller.dismiss(animated: false, completion: nil)
-        if let currentViewController = self.currentViewController {
-            currentViewController.willMove(toParent: nil)
-            currentViewController.view.removeFromSuperview()
-            currentViewController.removeFromParent()
-            currentViewController.didMove(toParent: nil)
-        }
-        let loginResult: LoginResult
-        if let user = user {
-            loginResult = .success(user)
-        } else {
-            loginResult = .failure
-        }
-        self.updateCurrentViewController(loginResult: loginResult)
-    }
-    
     private var currentViewController: UIViewController?
-    private func updateCurrentViewController(loginResult: LoginResult) {
+    
+    public func updateCurrentViewController(user: Firebase.User?, animated: Bool) {
         let viewController: UIViewController
-        switch loginResult {
-        case .success(let user):
-            if let currentUserViewController = self.currentViewController as? UserRootViewController,
-                currentUserViewController.user == user {
-                viewController = currentUserViewController
-            } else {
-                viewController = UserRootViewController(user: user, hostViewController: self)
-            }
-        case .failure:
-            viewController = AuthenticationViewController(rootViewController: self)
+        if let existingUser = user {
+            viewController = UserRootViewController(user: existingUser)
+        } else {
+            viewController = AuthViewController()
+            (viewController as! AuthViewController).delegate = self
         }
         
         let viewControllerToRemove = self.currentViewController
@@ -72,24 +27,66 @@ class RootViewController: UIViewController {
         
         var viewControllersToDismiss = [UIViewController]()
         var currentPresentedViewController = viewControllerToRemove?.presentedViewController
-        while (currentPresentedViewController != nil) {
-            guard let presentedViewController = currentPresentedViewController else { break }
+        while let presentedViewController = currentPresentedViewController {
             viewControllersToDismiss.append(presentedViewController)
             currentPresentedViewController = presentedViewController.presentedViewController
         }
         for viewController in viewControllersToDismiss.reversed() {
             viewController.dismiss(animated: false, completion: nil)
         }
-        self.currentViewController = viewController
+        
         viewController.willMove(toParent: self)
         view.addSubview(viewController.view)
         self.addChild(viewController)
         viewController.didMove(toParent: self)
-
-        viewControllerToRemove?.willMove(toParent: nil)
-        viewControllerToRemove?.removeFromParent()
-        viewControllerToRemove?.view.removeFromSuperview()
-        viewControllerToRemove?.didMove(toParent: nil)
+        
+        if animated {
+            viewController.view.alpha = 0.0
+            UIView.animate(withDuration: 0.3, animations: {
+                viewController.view.alpha = 1.0
+                viewControllerToRemove?.view.alpha = 0.0
+            }) { (_) in
+                viewControllerToRemove?.willMove(toParent: self)
+                viewControllerToRemove?.removeFromParent()
+                viewControllerToRemove?.view.removeFromSuperview()
+                viewControllerToRemove?.didMove(toParent: self)
+            }
+        } else {
+            viewControllerToRemove?.willMove(toParent: nil)
+            viewControllerToRemove?.removeFromParent()
+            viewControllerToRemove?.view.removeFromSuperview()
+            viewControllerToRemove?.didMove(toParent: nil)
+        }
+        
+        self.currentViewController = viewController
     }
     
+}
+
+extension RootViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = Theme.backgroundColor
+        
+        let fireUser = Auth.auth().currentUser
+        self.updateCurrentViewController(user: fireUser, animated: false)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.currentViewController?.view.frame = self.view.bounds
+    }
+}
+
+extension RootViewController: UserAuthDelegate {
+    func updateUser(_ viewController: UIViewController, user: User, animated: Bool) {
+        viewController.dismiss(animated: true, completion: nil)
+        if let currentViewController = self.currentViewController {
+            currentViewController.willMove(toParent: nil)
+            currentViewController.view.removeFromSuperview()
+            currentViewController.removeFromParent()
+            currentViewController.didMove(toParent: nil)
+        }
+        self.updateCurrentViewController(user: user, animated: true)
+    }
 }

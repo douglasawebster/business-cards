@@ -20,10 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            let navigationController = RootViewController()
+            let rootViewController = RootViewController()
             
-            let navigationBarTextAttributes = [
+            let navigationBarTextAttributes =  [
                 NSAttributedString.Key.foregroundColor : UIColor.white
             ]
             
@@ -47,16 +46,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
                 UINavigationBar.appearance().titleTextAttributes = navigationBarTextAttributes
                 UINavigationBar.appearance().largeTitleTextAttributes = navigationBarTextAttributes
-                UIBarButtonItem.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setTitleTextAttributes(navigationBarTextAttributes, for: .normal)
+                UIBarButtonItem.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).setTitleTextAttributes(navigationBarTextAttributes
+                , for: .normal)
                 
                 UINavigationBar.appearance().isTranslucent = false
             }
             
-            UINavigationBar.appearance().tintColor = UIColor.white
+            UINavigationBar.appearance().tintColor = .white
             
-            window.rootViewController = navigationController
-            window.makeKeyAndVisible()
-            self.window = window
+            window = UIWindow(windowScene: windowScene)
+            window?.rootViewController = rootViewController
+            window?.makeKeyAndVisible()
         }
     }
 

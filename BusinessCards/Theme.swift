@@ -10,7 +10,7 @@ import UIKit
 
 public class Theme {
     
-    public static let backgroundColor: UIColor = {
+    public static var backgroundColor: UIColor = {
         if #available(iOS 13, *) {
             return UIColor.systemBackground
         } else {
@@ -24,7 +24,7 @@ public class Theme {
             return UIColor { (traitCollection) -> UIColor in
                 switch traitCollection.userInterfaceStyle {
                 case .dark:
-                    return UIColor(red: 0/255, green: 99/255, blue: 93/255, alpha: 1)
+                    return UIColor(red: 0/255, green: 99/255, blue: 80/255, alpha: 1)
                 case .light: fallthrough
                 case .unspecified: fallthrough
                 @unknown default:
@@ -35,6 +35,8 @@ public class Theme {
             return standardKeyColor
         }
     }()
+    
+    public static let subtleTextColor = UIColor(red: 163/256, green: 159/256, blue: 178/256, alpha: 1)
     
     public static func getBoldLabel(text: String) -> UILabel {
         let label = UILabel()
@@ -64,7 +66,7 @@ public class Theme {
     }
     
     public static func getTextField(placeholder: String) -> UITextField {
-        let textField = PaddingTextField()
+        let textField = UITextField()
         textField.borderStyle = .roundedRect
         textField.contentVerticalAlignment = .center
         textField.font = UIFont.preferredFont(forTextStyle: .body)

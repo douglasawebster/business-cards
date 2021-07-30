@@ -50,11 +50,19 @@ class WalletViewController: UIViewController, UITableViewDataSource, UITableView
         let cardCell = tableView.dequeueReusableCell(withIdentifier: self.cardCellIdentifier, for: indexPath) as! CardTableViewCell
         let cardData = cards[indexPath.row]
         cardCell.companyName = cardData.companyName
+        cardCell.firstName = cardData.firstName
+        cardCell.middleName = cardData.middleName
+        cardCell.lastName = cardData.lastName
+        cardCell.position = cardData.position
+        cardCell.phoneNumber = cardData.phoneNumber
+        cardCell.fax = cardData.fax
+        cardCell.email = cardData.email
+        cardCell.address = cardData.address
         return cardCell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 500.0
+        return CardTableViewCell.preferredRowHeight()
     }
     
     private let cardCellIdentifier = "WalletCellIdentifier"
@@ -63,6 +71,7 @@ class WalletViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CardTableViewCell.self, forCellReuseIdentifier: self.cardCellIdentifier)
+        tableView.separatorStyle = .none
         return tableView
     }()
     
