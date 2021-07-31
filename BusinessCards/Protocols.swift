@@ -10,5 +10,5 @@ import UIKit
 import Firebase
 
 protocol UserAuthDelegate {
-    func updateUser(_ viewController: UIViewController, user: Firebase.User, animated: Bool)
+    func updateUser(_ viewController: UIViewController, user: User, animated: Bool)
 }

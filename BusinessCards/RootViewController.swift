@@ -13,7 +13,46 @@ class RootViewController: UIViewController {
     
     private var currentViewController: UIViewController?
     
-    public func updateCurrentViewController(user: Firebase.User?, animated: Bool) {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        self.attemptAutoSignIn()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = Theme.backgroundColor
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.currentViewController?.view.frame = self.view.bounds
+    }
+    
+    private func attemptAutoSignIn() {
+        AuthProvider.autoSignIn(completionHandler: { [weak self] (result) in
+            guard let strongSelf = self else { return }
+            DispatchQueue.main.async {
+                var user: User?
+                switch result {
+                case .success(let authedUser):
+                    user = authedUser
+                case .failure(_):
+                    user = nil
+                }
+                strongSelf.updateCurrentViewController(user: user, animated: false)
+            }
+        })
+    }
+    
+}
+
+extension RootViewController {
+    
+    public func updateCurrentViewController(user: User?, animated: Bool) {
         let viewController: UIViewController
         if let existingUser = user {
             viewController = UserRootViewController(user: existingUser)
@@ -63,22 +102,8 @@ class RootViewController: UIViewController {
     
 }
 
-extension RootViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = Theme.backgroundColor
-        
-        let fireUser = Auth.auth().currentUser
-        self.updateCurrentViewController(user: fireUser, animated: false)
-    }
+extension RootViewController: UserAuthDelegate {    
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.currentViewController?.view.frame = self.view.bounds
-    }
-}
-
-extension RootViewController: UserAuthDelegate {
     func updateUser(_ viewController: UIViewController, user: User, animated: Bool) {
         viewController.dismiss(animated: true, completion: nil)
         if let currentViewController = self.currentViewController {
@@ -89,4 +114,5 @@ extension RootViewController: UserAuthDelegate {
         }
         self.updateCurrentViewController(user: user, animated: true)
     }
+    
 }

@@ -17,11 +17,11 @@ enum CardDetailType: Int {
 
 class UserRootViewController: UIViewController, UINavigationControllerDelegate {
     
-    let user: Firebase.User
+    let user: User
     
     var currentViewController: UIViewController? = nil
 
-    init(user: Firebase.User) {
+    init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
     }
@@ -43,7 +43,6 @@ class UserRootViewController: UIViewController, UINavigationControllerDelegate {
         tabBar.items = tabBarItems
         tabBar.selectedItem = walletViewController.tabBarItem
         view.addSubview(tabBar)
-        view.addSubview(walletViewController.view)
         self.setCurrentViewController(walletViewController)
     }
     
@@ -76,7 +75,6 @@ class UserRootViewController: UIViewController, UINavigationControllerDelegate {
     
     private lazy var tabBar: UITabBar = {
         let tabBar = UITabBar()
-        tabBar.tintColor = Theme.keyColor
         tabBar.delegate = self
         return tabBar
     }()
@@ -114,6 +112,7 @@ extension UserRootViewController {
         
         viewController.willMove(toParent: self)
         self.addChild(viewController)
+        view.addSubview(viewController.view)
         viewController.view.frame = view.bounds
         viewController.didMove(toParent: self)
         tabBar.invalidateIntrinsicContentSize()

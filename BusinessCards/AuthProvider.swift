@@ -21,6 +21,7 @@ public enum AuthError: Error {
     case invalidPassword
     case noAccount
     case accountDisabled
+    case expiredToken
     case network
     
     public static func errorString(for error: AuthError) -> String {
@@ -46,6 +47,8 @@ public enum AuthError: Error {
             errorString = NSLocalizedString("No such account", comment: "")
         case .accountDisabled:
             errorString = NSLocalizedString("Account disasbled", comment: "")
+        case .expiredToken:
+            errorString = NSLocalizedString("Auto sign in failed", comment: "")
         case .network:
             errorString = NSLocalizedString("Network error", comment: "")
         case .unknown:
@@ -57,9 +60,22 @@ public enum AuthError: Error {
 
 class AuthProvider {
     
-    public static func signIn(email: String, password: String, completionHandler: @escaping (Result<Firebase.User, AuthError>) -> ()) {
+    public static func autoSignIn(completionHandler: @escaping (Result<User, AuthError>) -> ()) {
+        let fireUser = Auth.auth().currentUser
+        if let authedUser = fireUser {
+            let databaseReference = User.databaseReference(for: authedUser.uid)
+            let user = User(fireUser: authedUser, rootDatabaseReference: databaseReference)
+            completionHandler(.success(user))
+        } else {
+            completionHandler(.failure(.expiredToken))
+        }
+    }
+    
+    public static func signIn(email: String, password: String, completionHandler: @escaping (Result<User, AuthError>) -> ()) {
         Auth.auth().signIn(withEmail: email, password: password) { (signInResult, fireError) in
-            if let user = signInResult?.user, fireError == nil {
+            if let authedUser = signInResult?.user, fireError == nil {
+                let databaseReference = User.databaseReference(for: authedUser.uid)
+                let user = User(fireUser: authedUser, rootDatabaseReference: databaseReference)
                 completionHandler(.success(user))
             } else {
                 let authError = self.authError(for: fireError)
@@ -68,7 +84,7 @@ class AuthProvider {
         }
     }
     
-    public static func signUp(firstName: String, lastName: String, email: String, password: String, completionHandler: @escaping (Result<Firebase.User, AuthError>) -> ()) {
+    public static func signUp(firstName: String, lastName: String, email: String, password: String, completionHandler: @escaping (Result<User, AuthError>) -> ()) {
         let trimmedFirstName = firstName.trimWhitespace()
         guard !trimmedFirstName.isBlank else {
             completionHandler(.failure(.missingFirstName))
@@ -80,15 +96,23 @@ class AuthProvider {
             return
         }
         Auth.auth().createUser(withEmail: email, password: password, completion: { (signInResult, fireError) in
-            if let authUser = signInResult?.user, fireError == nil {
-                let changeRequest = authUser.createProfileChangeRequest()
+            if let authedUser = signInResult?.user, fireError == nil {
+                let changeRequest = authedUser.createProfileChangeRequest()
                 changeRequest.displayName = trimmedFirstName + " " + trimmedLastName
                 changeRequest.commitChanges(completion: { (changeError) in
                     if let error = changeError {
                         let updateError = self.authError(for: error)
                         completionHandler(.failure(updateError))
                     } else {
-                        completionHandler(.success(authUser))
+                        let databaseReference = User.publicDatabaseReference(for: authedUser.uid)
+                        let namesDictionary = [
+                            User.Key.firstName.rawValue : trimmedFirstName,
+                            User.Key.lastName.rawValue : trimmedLastName
+                        ]
+                        let userValues = [User.Key.nameDictionaryKey.rawValue : namesDictionary]
+                        databaseReference.setValue(userValues)
+                        let user = User(fireUser: authedUser, rootDatabaseReference: databaseReference)
+                        completionHandler(.success(user))
                     }
                 })
             } else {
@@ -117,6 +141,8 @@ class AuthProvider {
                 authError = .passwordTooShort
             case .emailAlreadyInUse:
                 authError = .emailTaken
+            case .invalidUserToken:
+                authError = .expiredToken
             default:
                 authError = .unknown
             }
@@ -127,3 +153,5 @@ class AuthProvider {
     }
     
 }
+
+
