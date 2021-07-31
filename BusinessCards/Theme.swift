@@ -24,17 +24,36 @@ public class Theme {
             return UIColor { (traitCollection) -> UIColor in
                 switch traitCollection.userInterfaceStyle {
                 case .dark:
-                    return UIColor(red: 0/255, green: 99/255, blue: 80/255, alpha: 1)
+                    return UIColor(red: 0/255, green: 115/255, blue: 100/255, alpha: 1)
                 case .light: fallthrough
                 case .unspecified: fallthrough
                 @unknown default:
-                return standardKeyColor
+                    return standardKeyColor
                 }
             }
         } else {
             return standardKeyColor
         }
     }()
+    
+    public static var secondaryColor: UIColor = {
+        let standardSecondaryColor = UIColor(red: 76/255, green: 33/255, blue: 42/255, alpha: 1)
+        if #available(iOS 13, *) {
+            return UIColor { (traitCollection) -> UIColor in
+                switch traitCollection.userInterfaceStyle {
+                case .dark:
+                    return UIColor(red: 124/255, green: 33/255, blue: 42/255, alpha: 1.0)
+                case .light: fallthrough
+                case .unspecified: fallthrough
+                @unknown default:
+                    return standardSecondaryColor
+                }
+            }
+        } else {
+            return standardSecondaryColor
+        }
+    }()
+    
     
     public static let subtleTextColor = UIColor(red: 163/256, green: 159/256, blue: 178/256, alpha: 1)
     
