@@ -122,6 +122,10 @@ class AuthProvider {
         })
     }
     
+    public static func signOut() {
+        try? Auth.auth().signOut()
+    }
+    
     private static func authError(for error: Error?) -> AuthError {
         guard let existingError = error else { return .unknown }
         let authError: AuthError

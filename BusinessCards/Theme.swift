@@ -54,6 +54,24 @@ public class Theme {
         }
     }()
     
+    public static var searchBarTextFieldColor: UIColor = {
+        let standardSearchBarTextFieldColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.75)
+        if #available(iOS 13, *) {
+            return UIColor { (traitCollection) -> UIColor in
+                switch traitCollection.userInterfaceStyle {
+                case .dark:
+                    return UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
+                case .light: fallthrough
+                case .unspecified: fallthrough
+                @unknown default:
+                    return standardSearchBarTextFieldColor
+                }
+            }
+        } else {
+            return standardSearchBarTextFieldColor
+        }
+    }()
+    
     
     public static let subtleTextColor = UIColor(red: 163/256, green: 159/256, blue: 178/256, alpha: 1)
     
